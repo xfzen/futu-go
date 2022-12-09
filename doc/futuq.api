@@ -1,0 +1,22 @@
+info(
+	title: "futuq demo"				// TODO: add title
+	desc: "futuq demo"				// TODO: add description
+	author: "xsens"
+	email: "gxfzen@gmail.com"
+)
+
+@server(
+	group: common
+)
+
+service futuq-api {
+	@handler futuqPing
+	post /api/v1/futuq/ping returns (FutuqPingResp)
+}
+
+type (
+	FutuqPingResp {
+		ErrMSg  string `json:"msg"`
+		ErrCode string `json:"code"`
+	}
+)
