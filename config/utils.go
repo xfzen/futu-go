@@ -6,7 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 )
 
-var configFile = flag.String("f", "etc/futuq-api.yaml", "the config file")
+var configFile = flag.String("zf", "etc/futuq-api.yaml", "the config file")
 
 func LoadConf(path string) Config {
 	var c Config

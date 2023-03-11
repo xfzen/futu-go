@@ -7,6 +7,7 @@ import (
 	"futuq/api/internal/handler"
 	"futuq/api/internal/svc"
 	"futuq/config"
+	"futuq/database"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -27,6 +28,9 @@ func main() {
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+
+	// setup database
+	database.SetupDatabase()
 
 	server.Start()
 }

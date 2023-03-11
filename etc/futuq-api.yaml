@@ -11,3 +11,8 @@ Log:
   Level: info
   Mode: console
   Path: ./logs
+
+# Driver支持sqlite、mysql；仅Driver为mysql，Source才生效
+Database:
+  Driver: mysql
+  Source: root:root123456@tcp(127.0.0.1:3306)/futuq?charset=utf8mb4&parseTime=True&loc=Local&timeout=1000ms
