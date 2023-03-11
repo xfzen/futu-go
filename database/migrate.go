@@ -1,6 +1,6 @@
 package database
 
-import "futuq/domain/models/histdata"
+import "futuq/models/histdata"
 
 // 数据库迁移
 func AutoMigrate() error {

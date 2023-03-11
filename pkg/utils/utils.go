@@ -21,3 +21,25 @@ func DumpSlice(title string, list []float64) {
 
 	fmt.Printf("\n")
 }
+
+// 用于组按条件模糊查询的SQL语句中
+func ListMap2Str(mapVue map[string]string) string {
+	str := ""
+	if len(mapVue) == 0 {
+		str = "1=1" // 加此条件为了sql条件where不报错
+		return str
+	}
+
+	for field := range mapVue {
+		if field == "id" || field == "dept_id" || field == "roomId" || field == "station_no" || field == "category" {
+			str = str + "`" + field + "` = "
+			str = str + "'" + mapVue[field] + "' and "
+		} else {
+			str = str + "`" + field + "` like "
+			str = str + "'%" + mapVue[field] + "%' and "
+		}
+	}
+
+	str = string([]byte(str)[:len(str)-4])
+	return str
+}

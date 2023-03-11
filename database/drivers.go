@@ -47,8 +47,8 @@ func createDatabaseNotExist(source string) error {
 	index1 := strings.Index(source, "/")
 	index2 := strings.Index(source, "?")
 
-	dbName := source[index1+1 : index2]
 	sourceRoot := source[:index1] + "/"
+	dbName := source[index1+1 : index2]
 
 	// 创建数据库连接
 	db, err := sql.Open("mysql", sourceRoot)
