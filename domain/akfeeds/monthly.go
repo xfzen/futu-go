@@ -2,19 +2,21 @@ package akfeeds
 
 import (
 	"encoding/json"
+	"math"
 	"sort"
+	"strconv"
 	"time"
 
-	"futuq/pkg/gota"
-	"futuq/pkg/utils"
+	"futuq/models"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type MonthlyData struct {
-	// Date  string // 2023-01
-	Year  int // 2023
-	Month int // 01
+	Symbol string
+	Date   string // 2023-01
+	Year   int    // 2023
+	Month  int    // 01
 
 	Open   float64 // 开盘价
 	Close  float64 // 收盘价
@@ -25,7 +27,7 @@ type MonthlyData struct {
 	Change float64 // 升跌幅度
 }
 
-func HandleIndexData(jsonstr string) error {
+func HandleIndexData(symbol, jsonstr string) error {
 	var indexDatas []map[string]interface{}
 
 	err := json.Unmarshal([]byte(jsonstr), &indexDatas)
@@ -35,19 +37,52 @@ func HandleIndexData(jsonstr string) error {
 	}
 
 	// convert to monthly data
-	montylyData := ConvertToMonthlyData(indexDatas)
+	monthlyDataList := ConvertToMonthlyData(symbol, indexDatas)
 
-	dataJsonstr := utils.PrettyJson(montylyData)
-	df := gota.DataframeFromJSON(dataJsonstr)
+	// dataJsonstr := utils.PrettyJson(montylyData)
+	// df := gota.DataframeFromJSON(dataJsonstr)
 
-	gota.DemoAkDataFilter(df)
+	// gota.DemoAkDataFilter(df)
+
+	// insert monthlyData to db
+	HandleMonthlyData(monthlyDataList)
+
+	return nil
+}
+
+func HandleMonthlyData(dataList []MonthlyData) error {
+	miDataList := []models.MonthlyIndexData{}
+
+	logx.Info("~~~~~~~~~~~~~~~~HandleMonthlyData~~~~~~~~~~~~~~~~~~~~~")
+	for _, v := range dataList {
+		item := models.MonthlyIndexData{}
+		item.Symbol = v.Symbol
+		item.Close = v.Close
+		item.High = v.High
+		item.Open = v.Open
+		item.Low = v.Low
+		item.Change = v.Change
+		item.Year = v.Year
+		item.Month = v.Month
+		item.Date = v.Date
+
+		miDataList = append(miDataList, item)
+	}
+
+	// batinsert
+	model := models.NewTMonthlyIndexModel()
+	err := model.BatchInsert(miDataList)
+	if err != nil {
+		logx.Error(err)
+		return err
+	}
 
 	return nil
 }
 
 // 将每日数据转换为每月数据
-func ConvertToMonthlyData(dailyData []map[string]interface{}) []MonthlyData {
-	logx.Infof("~~~~~~~~~~~~~~~~~~~ConvertToMonthlyData~~~~~~~~~~~~~~~~~~~~~~~~~~")
+func ConvertToMonthlyData(symbol string, dailyData []map[string]interface{}) []MonthlyData {
+	logx.Infof("~~~~~~~~~~~~~~~~~~~ConvertToMonthlyData symbol: %v~~~~~~~~~~~~~~~~~~~~~~~~~~", symbol)
 	logx.Infof("dailyData1 size: %v", len(dailyData))
 
 	// 对每日数据按时间升序排序
@@ -65,10 +100,11 @@ func ConvertToMonthlyData(dailyData []map[string]interface{}) []MonthlyData {
 	for _, data := range dailyData {
 		// 解析日期
 		dateStr := data["date"].(string)
-		date, _ := time.Parse("2006-01-02T00:00:00.000Z", dateStr)
+		dateTime, _ := time.Parse("2006-01-02T00:00:00.000Z", dateStr)
+		date := strconv.Itoa(dateTime.Year()) + "-" + strconv.Itoa(int(dateTime.Month()))
 
 		// 如果当前日期的月份和上一条数据的月份不同，表示进入了新的一个月
-		if date.Month() != time.Month(currentMonth.Month) {
+		if dateTime.Month() != time.Month(currentMonth.Month) {
 			// 如果不是第一条数据，将上一个月的数据添加到结果中
 			if currentMonth.Month != 0 {
 				monthlyData = append(monthlyData, currentMonth)
@@ -81,8 +117,10 @@ func ConvertToMonthlyData(dailyData []map[string]interface{}) []MonthlyData {
 
 			// 初始化新的月份数据
 			currentMonth = MonthlyData{
-				Year:   date.Year(),
-				Month:  int(date.Month()),
+				Symbol: symbol,
+				Date:   date,
+				Year:   dateTime.Year(),
+				Month:  int(dateTime.Month()),
 				Open:   open,
 				High:   data["high"].(float64),
 				Low:    data["low"].(float64),
@@ -98,9 +136,11 @@ func ConvertToMonthlyData(dailyData []map[string]interface{}) []MonthlyData {
 			close := data["close"].(float64)
 			change := calcChange(open, close)
 
+			currentMonth.Symbol = symbol
 			currentMonth.Close = close
 			currentMonth.Volume += data["volume"].(float64)
 			currentMonth.Change = change
+			currentMonth.Date = date
 		}
 	}
 
@@ -128,8 +168,11 @@ func min(a, b float64) float64 {
 	return b
 }
 
-// 要计算股票的上涨或下跌幅度，您可以使用以下公式：
+// 要计算股票的上涨或下跌幅度，只取小数点后两位
 // 如果涨跌幅为正数，则表示上涨，如果为负数，则表示下跌
 func calcChange(open float64, close float64) float64 {
-	return (close - open) / open * 100
+	f := (close - open) / open * 100
+	change := math.Round(f*100) / 100
+
+	return change
 }

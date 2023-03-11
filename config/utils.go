@@ -6,18 +6,10 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 )
 
-var configFile = flag.String("zf", "etc/futuq-api.yaml", "the config file")
-
-func LoadConf(path string) Config {
-	var c Config
-	conf.MustLoad(path, &c)
-	return c
-}
-
-func GetConf() Config {
+func GetTestConf(cfile string) Config {
 	flag.Parse()
 	var c Config
-	conf.MustLoad(*configFile, &c)
+	conf.MustLoad(cfile, &c)
 
 	return c
 }

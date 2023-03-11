@@ -1,6 +1,7 @@
-package histdata
+package models
 
 import (
+	"futuq/database"
 	"futuq/pkg/utils"
 
 	log "github.com/pion/ion-log"
@@ -11,14 +12,14 @@ type TMonthlyIndexModel struct {
 	db *gorm.DB
 }
 
-func NewTMonthlyIndexModel(db *gorm.DB) *TMonthlyIndexModel {
+func NewTMonthlyIndexModel() *TMonthlyIndexModel {
 	return &TMonthlyIndexModel{
-		db: db,
+		db: database.GetDB(),
 	}
 }
 
 // Batch Insert
-func (m *TMonthlyIndexModel) BatchInsert(dataList []TIndexMonthly) error {
+func (m *TMonthlyIndexModel) BatchInsert(dataList []MonthlyIndexData) error {
 	for _, v := range dataList {
 		m.Insert(&v)
 	}
@@ -27,17 +28,17 @@ func (m *TMonthlyIndexModel) BatchInsert(dataList []TIndexMonthly) error {
 }
 
 // Insert
-func (m *TMonthlyIndexModel) Insert(data *TIndexMonthly) error {
+func (m *TMonthlyIndexModel) Insert(data *MonthlyIndexData) error {
 	// 通过uid查询，存在则更新；不存在则新增
-	if m.db.Model(TIndexMonthly{}).Where("date = ?", data.Date).Updates(&data).RowsAffected == 0 {
+	if m.db.Model(MonthlyIndexData{}).Where("date = ?", data.Date).Updates(&data).RowsAffected == 0 {
 		m.db.Create(&data)
 	}
 
 	return nil
 }
 
-func (m *TMonthlyIndexModel) List(cond map[string]string, page int, size int) (*[]TIndexMonthly, int64, error) {
-	var recordArr []TIndexMonthly
+func (m *TMonthlyIndexModel) List(cond map[string]string, page int, size int) (*[]MonthlyIndexData, int64, error) {
+	var recordArr []MonthlyIndexData
 
 	//  根据时间范围进行查找
 	startDate, startExist := cond["startDate"]
@@ -69,13 +70,13 @@ func (m *TMonthlyIndexModel) List(cond map[string]string, page int, size int) (*
 	var count int64
 	err := m.db.Where(sqlCond).Order("createdAt desc").Limit(size).Offset(offset).Find(&recordArr).Error
 	if err != nil {
-		log.Errorf("List by %s error, reason: %s", TIndexMonthly{}.TableName(), err)
+		log.Errorf("List by %s error, reason: %s", MonthlyIndexData{}.TableName(), err)
 		return &recordArr, 0, err
 	}
 
 	//  单独计数，count和limit、offset不能混用
 	sqlCond = sqlCond + " and deletedAt IS NULL"
-	m.db.Table(TIndexMonthly{}.TableName()).Where(sqlCond).Count(&count)
+	m.db.Table(MonthlyIndexData{}.TableName()).Where(sqlCond).Count(&count)
 
 	return &recordArr, count, nil
 }

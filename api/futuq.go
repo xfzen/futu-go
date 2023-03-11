@@ -30,7 +30,7 @@ func main() {
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 
 	// setup database
-	database.SetupDatabase()
+	database.SetupDatabase(c)
 
 	server.Start()
 }

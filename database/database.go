@@ -28,11 +28,26 @@ func SetupDatabaseV2(c config.Config) {
 	}
 }
 
-func SetupDatabase() {
-	c := config.GetConf()
+func SetupDatabase(c config.Config) {
 	driver := c.Database.Driver
 	source := c.Database.Source
 
+	logx.Infof("Database driver: %v, source: %v", driver, source)
+	tmpdb, err := setupDatabase(driver, source)
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	db = tmpdb
+
+	// 数据库迁移
+	err = AutoMigrate()
+	if err != nil {
+		panic(err)
+	}
+}
+
+func SetupTestDatabase(driver, source string) {
 	logx.Infof("Database driver: %v, source: %v", driver, source)
 	tmpdb, err := setupDatabase(driver, source)
 	if err != nil {

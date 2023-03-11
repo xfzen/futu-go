@@ -22,13 +22,14 @@ func GetHistIndexDaily(params map[string]string) error {
 
 	//  响应报文体, json格式
 	jsonstr := strResp.String()
+	symbol := params["symbol"]
 
 	// dataframe
-	df := gota.DataframeFromJSON(jsonstr)
-	gota.DemoAkDataFilter(df)
+	// df := gota.DataframeFromJSON(jsonstr)
+	// gota.DemoAkDataFilter(df)
 
 	// handle index data
-	HandleIndexData(jsonstr)
+	HandleIndexData(symbol, jsonstr)
 
 	return nil
 }

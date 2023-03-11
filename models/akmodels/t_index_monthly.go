@@ -1,4 +1,4 @@
-package histdata
+package akmodels
 
 import "futuq/database/model"
 

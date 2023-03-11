@@ -1,11 +1,11 @@
 package database
 
-import "futuq/models/histdata"
+import "futuq/models/akmodels"
 
 // 数据库迁移
 func AutoMigrate() error {
 	err := db.AutoMigrate(
-		new(histdata.TIndexMonthly),
+		new(akmodels.TIndexMonthly),
 	)
 
 	return err
