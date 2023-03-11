@@ -25,5 +25,5 @@ func TestGetUserSecurity(t *testing.T) {
 }
 
 func TestGetHistData_CNSZ(t *testing.T) {
-	GetHistData_CNSZ("000002", "2021-06-01", "2022-11-17")
+	GetHistData_CNSZ("601238", "2022-09-01", "2023-01-12")
 }

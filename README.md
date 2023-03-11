@@ -1,4 +1,4 @@
-# 富途FutuOpenD Golang接入代理
+# 富途FutuOpenD golang接入
 
 # 简介
 * Go语言封装的[富途牛牛OpenAPI](https://openapi.futunn.com/futu-api-doc/)

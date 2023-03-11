@@ -44,14 +44,14 @@ func GetUserSecurity(group string) {
 // 获取深圳市场股票历史数据
 func GetHistData_CNSZ(code string, begin string, end string) {
 	seinfo := &futsdk.Security{
-		Market: qotcommon.QotMarket_QotMarket_CNSZ_Security,
+		Market: qotcommon.QotMarket_QotMarket_CNSH_Security,
 		Code:   code,
 	}
 
 	var nextKey []byte
 
 	histData, err := opend.RequestHistoryKLine(ctx, seinfo, begin, end,
-		qotcommon.KLType_KLType_Day, qotcommon.RehabType_RehabType_Forward, 2000, qotcommon.KLFields_KLFields_None, nextKey, false)
+		qotcommon.KLType_KLType_Day, qotcommon.RehabType_RehabType_Forward, 5000, qotcommon.KLFields_KLFields_None, nextKey, false)
 	if err != nil {
 		log.Errorf("RequestHistoryKLine err: %v", err)
 		return

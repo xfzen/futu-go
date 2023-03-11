@@ -1,3 +1,13 @@
 Name: futu-api
 Host: 0.0.0.0
 Port: 8888
+
+# 日志打印配置
+Log:
+  ServiceName: futuq
+  Encoding: plain
+  Compress: false
+  KeepDays: 60
+  Level: info
+  Mode: console
+  Path: ./logs
