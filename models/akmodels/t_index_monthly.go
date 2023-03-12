@@ -2,6 +2,15 @@ package akmodels
 
 import "futuq/database/model"
 
+type TIndexMonthly struct {
+	model.Model
+
+	ModelIndexMonthly
+
+	model.ControlBy
+	model.ModelTime
+}
+
 type ModelIndexMonthly struct {
 	Symbol string  `json:"symbol" gorm:"column:symbol;comment:symbol"`
 	Date   string  `json:"date" gorm:"column:date;comment:年月（如2023-03）"`
@@ -12,15 +21,6 @@ type ModelIndexMonthly struct {
 	High   float64 `json:"high" gorm:"column:high;comment:最高价"`
 	Low    float64 `json:"low" gorm:"column:low;comment:最低价"`
 	Change float64 `json:"change" gorm:"column:change;comment:升跌幅度"`
-}
-
-type TIndexMonthly struct {
-	model.Model
-
-	ModelIndexMonthly
-
-	model.ControlBy
-	model.ModelTime
 }
 
 func (TIndexMonthly) TableName() string {

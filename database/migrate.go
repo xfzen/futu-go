@@ -6,6 +6,7 @@ import "futuq/models/akmodels"
 func AutoMigrate() error {
 	err := db.AutoMigrate(
 		new(akmodels.TIndexMonthly),
+		new(akmodels.TModelYearlyInfo),
 	)
 
 	return err

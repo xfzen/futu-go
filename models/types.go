@@ -8,4 +8,8 @@ type (
 	MonthlyIndexData struct {
 		akmodels.TIndexMonthly
 	}
+
+	TYearlyData struct {
+		akmodels.TModelYearlyInfo
+	}
 )

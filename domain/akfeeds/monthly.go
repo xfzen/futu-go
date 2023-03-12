@@ -1,7 +1,6 @@
 package akfeeds
 
 import (
-	"encoding/json"
 	"math"
 	"sort"
 	"strconv"
@@ -11,44 +10,6 @@ import (
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
-
-type MonthlyData struct {
-	Symbol string
-	Date   string // 2023-01
-	Year   int    // 2023
-	Month  int    // 01
-
-	Open   float64 // 开盘价
-	Close  float64 // 收盘价
-	High   float64 // 最高价
-	Low    float64 // 最低价
-	Volume float64 // 成交量
-
-	Change float64 // 升跌幅度
-}
-
-func HandleIndexData(symbol, jsonstr string) error {
-	var indexDatas []map[string]interface{}
-
-	err := json.Unmarshal([]byte(jsonstr), &indexDatas)
-	if err != nil {
-		logx.Errorf("json.Unmarshal err: %v", err)
-		return err
-	}
-
-	// convert to monthly data
-	monthlyDataList := ConvertToMonthlyData(symbol, indexDatas)
-
-	// dataJsonstr := utils.PrettyJson(montylyData)
-	// df := gota.DataframeFromJSON(dataJsonstr)
-
-	// gota.DemoAkDataFilter(df)
-
-	// insert monthlyData to db
-	HandleMonthlyData(monthlyDataList)
-
-	return nil
-}
 
 func HandleMonthlyData(dataList []MonthlyData) error {
 	miDataList := []models.MonthlyIndexData{}
