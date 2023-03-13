@@ -6,6 +6,7 @@ import (
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -20,9 +21,22 @@ func setupDatabase(driver, source string) (*gorm.DB, error) {
 	case "mysql":
 		return initMysql(source)
 
+	case "postgres":
+		return initPostgres(source)
+
 	default:
 		return initSqlite(DB_FILE_SQLITE)
 	}
+}
+
+func initPostgres(dsn string) (*gorm.DB, error) {
+	// https://github.com/go-gorm/postgres
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	return db, nil
 }
 
 func initSqlite(dbfile string) (*gorm.DB, error) {
