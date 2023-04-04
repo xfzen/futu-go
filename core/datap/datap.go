@@ -1,4 +1,4 @@
-package akfeeds
+package datap
 
 import (
 	"encoding/json"
@@ -6,6 +6,24 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+// 处理指数实时数据
+func HandleIndexSpot(jsonstr string) error {
+	var indexSpot []map[string]interface{}
+
+	err := json.Unmarshal([]byte(jsonstr), &indexSpot)
+	if err != nil {
+		logx.Errorf("json.Unmarshal err: %v", err)
+		return err
+	}
+
+	for k, v := range indexSpot {
+		logx.Infof("k: %v, v: %v", k, v)
+	}
+
+	return nil
+}
+
+// 处理指数历史行情
 func HandleIndexData(symbol, jsonstr string) error {
 	var indexDatas []map[string]interface{}
 

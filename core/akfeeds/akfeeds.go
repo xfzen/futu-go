@@ -3,18 +3,40 @@ package akfeeds
 import (
 	"errors"
 
+	"futuq/core/datap"
+	"futuq/pkg/akhttp"
 	"futuq/pkg/gota"
 
-	log "github.com/pion/ion-log"
 	"github.com/tidwall/gjson"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+// 指数实时数据
+func GetSpotIndex(params map[string]string) error {
+	baseurl := "http://127.0.0.1:8080/api/public/"
+
+	url := baseurl + "stock_zh_index_spot"
+	strResp, err := akhttp.Get(url, params)
+	if err != nil {
+		logx.Errorf("%v", err)
+		return err
+	}
+
+	//  响应报文体, json格式
+	jsonstr := strResp.String()
+
+	// logx.Infof(jsonstr)
+	datap.HandleIndexSpot(jsonstr)
+
+	return nil
+}
+
+// 历史指数行情
 func GetHistIndexDaily(params map[string]string) error {
 	baseurl := "http://127.0.0.1:8080/api/public/"
 
 	url := baseurl + "stock_zh_index_daily"
-	strResp, err := Get(url, params)
+	strResp, err := akhttp.Get(url, params)
 	if err != nil {
 		logx.Errorf("%v", err)
 		return err
@@ -29,7 +51,7 @@ func GetHistIndexDaily(params map[string]string) error {
 	// gota.DemoAkDataFilter(df)
 
 	// handle index data
-	HandleIndexData(symbol, jsonstr)
+	datap.HandleIndexData(symbol, jsonstr)
 
 	return nil
 }
@@ -38,16 +60,16 @@ func StockHist(params map[string]string) error {
 	baseurl := "http://127.0.0.1:8080/api/public/"
 
 	url := baseurl + "stock_zh_a_hist"
-	strResp, err := Get(url, params)
+	strResp, err := akhttp.Get(url, params)
 	if err != nil {
-		log.Errorf("%v", err)
+		logx.Errorf("%v", err)
 		return err
 	}
 
 	//  响应报文体, json格式
 	jsonstr := strResp.String()
 	if gjson.Get(jsonstr, "success").String() == "false" {
-		log.Errorf("InsertReturnArr failed: %v", err)
+		logx.Errorf("InsertReturnArr failed: %v", err)
 		return errors.New(gjson.Get(jsonstr, "errorMessage").String())
 	}
 

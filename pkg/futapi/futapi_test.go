@@ -6,7 +6,7 @@ import (
 
 	futsdk "futuq/pkg/futsdk"
 
-	log "github.com/pion/ion-log"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 func init() {
@@ -15,7 +15,7 @@ func init() {
 
 	err := opend.Connect(ctx, ":11111")
 	if err != nil {
-		log.Errorf("opend.Connect err: %v", err)
+		logx.Errorf("opend.Connect err: %v", err)
 		return
 	}
 }

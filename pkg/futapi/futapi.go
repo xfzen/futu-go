@@ -8,7 +8,7 @@ import (
 	"futuq/pkg/proto/qotcommon"
 	"futuq/pkg/utils"
 
-	log "github.com/pion/ion-log"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 var (
@@ -20,7 +20,7 @@ var (
 func GetUserSecurity(group string) {
 	secs, err := opend.GetUserSecurity(ctx, group)
 	if err != nil {
-		log.Errorf("GetUserSecurity err: %v", err)
+		logx.Errorf("GetUserSecurity err: %v", err)
 		return
 	}
 
@@ -28,7 +28,7 @@ func GetUserSecurity(group string) {
 		code := v.Basic.Security.Code
 		name := v.Basic.Name
 		listTime := v.Basic.ListTime
-		log.Infof("code: %v, name: %v, listTime: %v", code, name, listTime)
+		logx.Infof("code: %v, name: %v, listTime: %v", code, name, listTime)
 	}
 }
 
@@ -53,11 +53,11 @@ func GetHistData_CNSZ(code string, begin string, end string) {
 	histData, err := opend.RequestHistoryKLine(ctx, seinfo, begin, end,
 		qotcommon.KLType_KLType_Day, qotcommon.RehabType_RehabType_Forward, 5000, qotcommon.KLFields_KLFields_None, nextKey, false)
 	if err != nil {
-		log.Errorf("RequestHistoryKLine err: %v", err)
+		logx.Errorf("RequestHistoryKLine err: %v", err)
 		return
 	}
 
-	log.Warnf("len(histData): %v, nextKey: %v", len(histData.KLines), nextKey)
+	logx.Infof("len(histData): %v, nextKey: %v", len(histData.KLines), nextKey)
 
 	jsonstr := utils.PrettyJson(histData.KLines)
 

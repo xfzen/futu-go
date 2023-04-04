@@ -4,7 +4,7 @@ import (
 	"futuq/database"
 	"futuq/pkg/utils"
 
-	log "github.com/pion/ion-log"
+	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/gorm"
 )
 
@@ -70,7 +70,7 @@ func (m *TYearlyModel) List(cond map[string]string, page int, size int) (*[]TYea
 	var count int64
 	err := m.db.Where(sqlCond).Order("createdAt desc").Limit(size).Offset(offset).Find(&recordArr).Error
 	if err != nil {
-		log.Errorf("List by %s error, reason: %s", TYearlyData{}.TableName(), err)
+		logx.Errorf("List by %s error, reason: %s", TYearlyData{}.TableName(), err)
 		return &recordArr, 0, err
 	}
 

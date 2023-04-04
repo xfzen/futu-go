@@ -6,8 +6,6 @@ require (
 	github.com/go-gota/gota v0.12.0
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
-	github.com/markcheno/go-talib v0.0.0-20190307022042-cd53a9264d70
-	github.com/pion/ion-log v1.2.1
 	github.com/tidwall/gjson v1.14.4
 	github.com/zeromicro/go-zero v1.3.4
 	google.golang.org/protobuf v1.28.0
@@ -33,6 +31,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/justinas/alice v1.2.0 // indirect
+	github.com/markcheno/go-talib v0.0.0-20190307022042-cd53a9264d70
 	github.com/mattn/go-colorable v0.1.9 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-sqlite3 v1.14.15 // indirect

@@ -1,12 +1,14 @@
 package gota
 
-import log "github.com/pion/ion-log"
+import (
+	"github.com/zeromicro/go-zero/core/logx"
+)
 
 func calcAng(data []float64) []float64 {
 	var delta []float64
 
 	datalen := len(data)
-	log.Infof("~~~~~~~~~~~~~~~~len(data): %v", datalen)
+	logx.Infof("~~~~~~~~~~~~~~~~len(data): %v", datalen)
 
 	for i := 0; i < datalen; i++ {
 		// filter first data
@@ -21,7 +23,7 @@ func calcAng(data []float64) []float64 {
 		delta = append(delta, diff)
 	}
 
-	log.Warnf("delta: %v", delta)
+	logx.Infof("delta: %v", delta)
 
 	return delta
 }

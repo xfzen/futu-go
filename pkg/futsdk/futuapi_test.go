@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	log "github.com/pion/ion-log"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 func TestConnect(t *testing.T) {
@@ -19,11 +19,11 @@ func TestConnect(t *testing.T) {
 
 	err := api.Connect(context.Background(), ":11111")
 	if err != nil {
-		log.Errorf("api.Connect err: %v", err)
+		logx.Errorf("api.Connect err: %v", err)
 		return
 	}
 
-	log.Infof(">> err: %v", err)
+	logx.Infof(">> err: %v", err)
 
 	// if sub, err := api.QuerySubscription(context.Background(), true); err != nil {
 	// 	t.Error(err)

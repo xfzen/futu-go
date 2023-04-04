@@ -20,11 +20,19 @@ func initDB() {
 	database.SetupTestDatabase(c.Database.Driver, c.Database.Source)
 }
 
+func TestGetSpotIndex(t *testing.T) {
+	initDB()
+
+	params := map[string]string{}
+	GetSpotIndex(params)
+}
+
 func TestGetHistIndexDaily(t *testing.T) {
 	initDB()
 
 	params := map[string]string{
-		"symbol": "sh000016",
+		// "symbol": "sh000016",
+		"symbol": "sz399006",
 	}
 
 	GetHistIndexDaily(params)

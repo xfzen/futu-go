@@ -8,18 +8,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type TMonthlyIndexModel struct {
+type TBoardInfoModel struct {
 	db *gorm.DB
 }
 
-func NewTMonthlyIndexModel() *TMonthlyIndexModel {
-	return &TMonthlyIndexModel{
+func NewTBoardInfoModel() *TBoardInfoModel {
+	return &TBoardInfoModel{
 		db: database.GetDB(),
 	}
 }
 
 // Batch Insert
-func (m *TMonthlyIndexModel) BatchInsert(dataList []TMonthlyIndexData) error {
+func (m *TBoardInfoModel) BatchInsert(dataList []TBoardInfoData) error {
 	for _, v := range dataList {
 		m.Insert(&v)
 	}
@@ -28,17 +28,17 @@ func (m *TMonthlyIndexModel) BatchInsert(dataList []TMonthlyIndexData) error {
 }
 
 // Insert
-func (m *TMonthlyIndexModel) Insert(data *TMonthlyIndexData) error {
+func (m *TBoardInfoModel) Insert(data *TBoardInfoData) error {
 	// 通过uid查询，存在则更新；不存在则新增
-	if m.db.Model(TMonthlyIndexData{}).Where("date = ?", data.Date).Updates(&data).RowsAffected == 0 {
+	if m.db.Model(TBoardInfoData{}).Where("symbol = ?", data.Symbol).Updates(&data).RowsAffected == 0 {
 		m.db.Create(&data)
 	}
 
 	return nil
 }
 
-func (m *TMonthlyIndexModel) List(cond map[string]string, page int, size int) (*[]TMonthlyIndexData, int64, error) {
-	var recordArr []TMonthlyIndexData
+func (m *TBoardInfoModel) List(cond map[string]string, page int, size int) (*[]TBoardInfoData, int64, error) {
+	var recordArr []TBoardInfoData
 
 	//  根据时间范围进行查找
 	startDate, startExist := cond["startDate"]
@@ -70,13 +70,13 @@ func (m *TMonthlyIndexModel) List(cond map[string]string, page int, size int) (*
 	var count int64
 	err := m.db.Where(sqlCond).Order("createdAt desc").Limit(size).Offset(offset).Find(&recordArr).Error
 	if err != nil {
-		logx.Errorf("List by %s error, reason: %s", TMonthlyIndexData{}.TableName(), err)
+		logx.Errorf("List by %s error, reason: %s", TBoardInfoData{}.TableName(), err)
 		return &recordArr, 0, err
 	}
 
 	//  单独计数，count和limit、offset不能混用
 	sqlCond = sqlCond + " and deletedAt IS NULL"
-	m.db.Table(TMonthlyIndexData{}.TableName()).Where(sqlCond).Count(&count)
+	m.db.Table(TBoardInfoData{}.TableName()).Where(sqlCond).Count(&count)
 
 	return &recordArr, count, nil
 }

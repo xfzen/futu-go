@@ -1,4 +1,4 @@
-package akfeeds
+package datap
 
 import (
 	"math"
@@ -12,11 +12,11 @@ import (
 )
 
 func HandleMonthlyData(dataList []MonthlyData) error {
-	miDataList := []models.MonthlyIndexData{}
+	miDataList := []models.TMonthlyIndexData{}
 
 	logx.Info("~~~~~~~~~~~~~~~~HandleMonthlyData~~~~~~~~~~~~~~~~~~~~~")
 	for _, v := range dataList {
-		item := models.MonthlyIndexData{}
+		item := models.TMonthlyIndexData{}
 		item.Symbol = v.Symbol
 		item.Close = v.Close
 		item.High = v.High

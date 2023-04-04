@@ -5,11 +5,15 @@ import (
 )
 
 type (
-	MonthlyIndexData struct {
+	TMonthlyIndexData struct {
 		akmodels.TIndexMonthly
 	}
 
 	TYearlyData struct {
 		akmodels.TModelYearlyInfo
+	}
+
+	TBoardInfoData struct {
+		akmodels.TModelBoardInfo
 	}
 )

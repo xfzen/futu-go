@@ -7,7 +7,6 @@ import (
 
 	"github.com/go-gota/gota/dataframe"
 	"github.com/markcheno/go-talib"
-	log "github.com/pion/ion-log"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -34,11 +33,11 @@ func DemoMtDataFilter(json string) {
 }
 
 func DemoAkDataFilter(df dataframe.DataFrame) {
-	log.Infof(">>DemoAkDataFilter df: %v", df)
+	logx.Infof(">>DemoAkDataFilter df: %v", df)
 
 	buf := new(bytes.Buffer)
 	_ = df.WriteJSON(buf)
 
 	prettyJson := utils.PrettyJson(buf.String())
-	log.Infof("json: %v", prettyJson)
+	logx.Infof("json: %v", prettyJson)
 }

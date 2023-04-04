@@ -14,6 +14,6 @@ Log:
 
 # Driver支持sqlite、mysql、postgres；仅Driver为mysql/postgres，Source才生效
 Database:
-  Driver: postgres
-  # Source: root:root123456@tcp(127.0.0.1:3306)/futuq?charset=utf8mb4&parseTime=True&loc=Local&timeout=1000ms // mysql
-  Source: host=127.0.0.1 user=postgres password=pgql dbname=futuq port=5432 sslmode=disable TimeZone=Asia/Shanghai
+  Driver: mysql
+  Source: root:root123456@tcp(127.0.0.1:3306)/futuq?charset=utf8mb4&parseTime=True&loc=Local&timeout=1000ms 
+  # Source: host=127.0.0.1 user=postgres password=pgql dbname=futuq port=5432 sslmode=disable TimeZone=Asia/Shanghai

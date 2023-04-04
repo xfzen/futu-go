@@ -7,6 +7,7 @@ func AutoMigrate() error {
 	err := db.AutoMigrate(
 		new(akmodels.TIndexMonthly),
 		new(akmodels.TModelYearlyInfo),
+		new(akmodels.TModelBoardInfo),
 	)
 
 	return err

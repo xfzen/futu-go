@@ -1,4 +1,4 @@
-package akfeeds
+package datap
 
 // 年变化幅度信息
 type YearlyChangeData struct {

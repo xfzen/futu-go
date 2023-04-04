@@ -1,11 +1,10 @@
-package akfeeds
+package akhttp
 
 import (
 	"bytes"
 	"encoding/json"
 
 	resty "github.com/go-resty/resty/v2"
-	log "github.com/pion/ion-log"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -32,7 +31,7 @@ func Post(url string, qjson interface{}) (r *resty.Response, e error) {
 		SetBody(qjson).
 		Post(url)
 
-	log.Warnf(">>status: %v", resp.Status())
+	logx.Infof(">>status: %v", resp.Status())
 
 	return resp, err
 }

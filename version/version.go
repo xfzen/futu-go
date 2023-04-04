@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"time"
 
-	log "github.com/pion/ion-log"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 var (
 	// Version should be updated by hand at each release
 	Version = "1.0.1rt"
 
-	//will be overwritten automatically by the build system
+	// will be overwritten automatically by the build system
 	GitCommit string
 	GoVersion string
 	BuildTime string
@@ -20,7 +20,7 @@ var (
 
 // FullVersion formats the version to be printed
 func FullVersion() string {
-	log.Infof(">>version: %v", GetFVersion())
+	logx.Infof(">>version: %v", GetFVersion())
 
 	return fmt.Sprintf("\nVersion: %6s \nGit commit: %6s \nGo version: %6s \nBuild time: %6s \n",
 		Version, GitCommit, GoVersion, BuildTime)
@@ -30,7 +30,7 @@ func FullVersion() string {
 func DumpVersion() {
 	// V1.0.1 build22.02.22-0ad223
 
-	log.Warnf(FullVersion())
+	logx.Infof(FullVersion())
 }
 
 func GetFVersion() string {
@@ -39,7 +39,7 @@ func GetFVersion() string {
 	btime := buildTime.Format("06.01.02")
 	FVersion = "V" + Version + " build" + btime
 
-	log.Warnf(">>FVersion: %v", FVersion)
+	logx.Infof(">>FVersion: %v", FVersion)
 
 	return FVersion
 }
